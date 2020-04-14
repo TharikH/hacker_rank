@@ -33,24 +33,20 @@ char ****get_document(char *text)
         {
         case ' ':
             *(*(*(*(document + (para - 1)) + (sent - 1)) + (word - 1)) + (letter - 1)) ='\0';
-            word++;
-            *(*(document + (para - 1)) + (sent - 1)) = (char **)realloc(*(*(document + (para - 1)) + (sent - 1)), word * sizeof(char *));
+            *(*(document + (para - 1)) + (sent - 1)) = (char **)realloc(*(*(document + (para - 1)) + (sent - 1)), ++word * sizeof(char *));
             letter = 1;
             *(*(*(document+(para-1))+(sent-1))+(word-1)) = (char *)malloc(sizeof(char));
             break;
         case '.':
-            sent++;
-            // *(*(document + (para - 1)) + (sent - 2)) = (char **)realloc(*(*(document + (para - 1)) + (sent - 1)), (word-1) * sizeof(char *));
-            *(document + (para - 1)) = (char ***)realloc(*(document + (para - 1)), sent * sizeof(char **));
+            *(*(*(*(document + (para - 1)) + (sent - 1)) + (word - 1)) + (letter - 1)) ='\0';
+            *(document + (para - 1)) = (char ***)realloc(*(document + (para - 1)), ++sent * sizeof(char **));
             word = 1;
             letter = 1;
             *(*(document+(para-1))+(sent-1)) = (char **)malloc(sizeof(char *));
             *(*(*(document+(para-1))+(sent-1))+(word-1)) = (char *)malloc(sizeof(char));
             break;
         case '\n':
-            para++;
-            document = (char ****)realloc(document, para * sizeof(char ***));
-            // *(document + (para - 2)) = (char ***)realloc(*(document + (para - 1)), (sent-1) * sizeof(char **));
+            document = (char ****)realloc(document,++para * sizeof(char ***));
             sent = 1;
             word = 1;
             letter = 1;
@@ -59,15 +55,15 @@ char ****get_document(char *text)
             *(*(*(document+(para-1))+(sent-1))+(word-1)) = (char *)malloc(sizeof(char));
             break;
         default:
-            letter++;
-            *(*(*(document + (para - 1)) + (sent - 1)) + (word - 1)) = (char *)realloc(*(*(*(document + (para - 1)) + (sent - 1)) + (word - 1)), (letter) * sizeof(char));
+            *(*(*(document + (para - 1)) + (sent - 1)) + (word - 1)) = (char *)realloc(*(*(*(document + (para - 1)) + (sent - 1)) + (word - 1)), (++letter) * sizeof(char));
             *(*(*(*(document + (para - 1)) + (sent - 1)) + (word - 1)) + (letter - 2)) = text[i];
+        }
+        if(text[i+1]=='\0'){
+            *(document + (para - 1)) = (char ***)realloc(*(document + (para - 1)), (sent-1) * sizeof(char **));
         }
     }
     return document;
 }
-
-
 
 char* get_input_text() {	
     int paragraph_count;
